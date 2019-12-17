@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.fleet.R
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.BufferedReader
 
@@ -38,6 +39,15 @@ class MainFragment : Fragment() {
         }
 
         deleteButton.setOnClickListener {
+            val deletedText = inputText.text.toString()
+            Snackbar.make(main, getString(R.string.note_deleted), Snackbar.LENGTH_LONG)
+                .apply {
+                    setAction(getString(R.string.undo)) {
+                        inputText.setText(deletedText)
+                        saveText(deletedText)
+                    }
+                    show()
+                }
             inputText.setText("")
             saveText("")
         }
