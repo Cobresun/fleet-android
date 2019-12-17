@@ -1,12 +1,15 @@
 package com.example.fleet.ui.main
 
-import androidx.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import com.example.fleet.R
+import kotlinx.android.synthetic.main.main_fragment.*
+import java.io.BufferedReader
 
 class MainFragment : Fragment() {
 
@@ -14,7 +17,8 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    private val filename = "fleetFile"
+    private val files: Array<String> by lazy { requireContext().fileList() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,8 +29,30 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        if (files.contains(filename)) {
+            val savedText = requireContext().openFileInput(filename).bufferedReader().use(BufferedReader::readText)
+            if (savedText.isNotEmpty()) {
+                inputText.setText(savedText)
+            }
+        }
+
+        deleteButton.setOnClickListener {
+            inputText.setText("")
+            saveText("")
+        }
+
+        inputText.addTextChangedListener {
+            it?.let {
+                saveText(it.toString())
+            }
+        }
+    }
+
+    private fun saveText(text: String) {
+        requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
+            it.write(text.toByteArray())
+        }
     }
 
 }
