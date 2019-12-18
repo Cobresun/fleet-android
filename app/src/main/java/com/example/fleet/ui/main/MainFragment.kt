@@ -25,6 +25,8 @@ class MainFragment : Fragment() {
     private val filename = "fleetFile"
     private val files: Array<String> by lazy { requireContext().fileList() }
 
+    private val clipboardManager by lazy { requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +47,9 @@ class MainFragment : Fragment() {
         deleteButton.setOnClickListener {
             val deletedText = inputText.text.toString()
             if (deletedText.isNotEmpty()) {
+                inputText.setText("")
+                saveText("")
+
                 Snackbar.make(main, getString(R.string.note_deleted), Snackbar.LENGTH_LONG)
                     .apply {
                         setAction(getString(R.string.undo)) {
@@ -53,15 +58,21 @@ class MainFragment : Fragment() {
                         }
                         show()
                     }
-                inputText.setText("")
-                saveText("")
             }
         }
 
         copyButton.setOnClickListener {
-            val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("text", inputText.text.toString())
-            clipboardManager.setPrimaryClip(clip)
+            val copiedText = inputText.text.toString()
+            if (copiedText.isNotEmpty()) {
+                val clip = ClipData.newPlainText("text", copiedText)
+                clipboardManager.setPrimaryClip(clip)
+
+                Snackbar.make(main, "Note copied!", Snackbar.LENGTH_SHORT)
+                    .apply {
+                        show()
+                    }
+            }
+
         }
 
         inputText.addTextChangedListener {
