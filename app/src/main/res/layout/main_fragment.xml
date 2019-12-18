@@ -18,7 +18,8 @@
             android:id="@+id/inputText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="top|start" />
+            android:gravity="top|start"
+            android:textSize="20sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
