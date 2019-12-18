@@ -72,7 +72,6 @@ class MainFragment : Fragment() {
                         show()
                     }
             }
-
         }
 
         inputText.addTextChangedListener {
