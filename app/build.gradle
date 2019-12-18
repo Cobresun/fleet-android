@@ -21,7 +21,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("string", "APPCENTER_API_KEY", "\"${System.env.APPCENTER_API_KEY}\"")
+            buildConfigField("String", "APPCENTER_API_KEY", "\"${System.env.APPCENTER_API_KEY}\"")
         }
         debug {
             buildConfigField("String", "APPCENTER_API_KEY", "\"${System.env.APPCENTER_API_KEY}\"")
