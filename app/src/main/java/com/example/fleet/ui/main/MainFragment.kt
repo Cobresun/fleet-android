@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.fleet.R
@@ -71,11 +72,7 @@ class MainFragment : Fragment() {
             if (copiedText.isNotEmpty()) {
                 val clip = ClipData.newPlainText("text", copiedText)
                 clipboardManager.setPrimaryClip(clip)
-
-                Snackbar.make(coordinatorLayout, "Note copied!", Snackbar.LENGTH_SHORT)
-                    .apply {
-                        show()
-                    }
+                Toast.makeText(requireContext(), getString(R.string.note_copied), Toast.LENGTH_SHORT).show()
             }
         }
 
