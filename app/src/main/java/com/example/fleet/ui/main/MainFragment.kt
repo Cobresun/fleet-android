@@ -4,11 +4,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
+import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.fleet.R
@@ -26,6 +27,7 @@ class MainFragment : Fragment() {
     private val files: Array<String> by lazy { requireContext().fileList() }
 
     private val clipboardManager by lazy { requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
+    private val inputMethodManager by lazy { requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +38,9 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        inputText.requestFocus()
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
 
         if (files.contains(filename)) {
             val savedText = requireContext().openFileInput(filename).bufferedReader().use(BufferedReader::readText)
