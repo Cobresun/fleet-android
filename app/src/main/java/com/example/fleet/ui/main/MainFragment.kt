@@ -55,7 +55,7 @@ class MainFragment : Fragment() {
                 inputText.setText("")
                 saveText("")
 
-                Snackbar.make(main, getString(R.string.note_deleted), Snackbar.LENGTH_LONG)
+                Snackbar.make(coordinatorLayout, getString(R.string.note_deleted), Snackbar.LENGTH_LONG)
                     .apply {
                         setAction(getString(R.string.undo)) {
                             inputText.setText(deletedText)
@@ -72,7 +72,7 @@ class MainFragment : Fragment() {
                 val clip = ClipData.newPlainText("text", copiedText)
                 clipboardManager.setPrimaryClip(clip)
 
-                Snackbar.make(main, "Note copied!", Snackbar.LENGTH_SHORT)
+                Snackbar.make(coordinatorLayout, "Note copied!", Snackbar.LENGTH_SHORT)
                     .apply {
                         show()
                     }
