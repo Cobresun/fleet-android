@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fleet</string>
+    <string name="app_name">Quiknote</string>
     <string name="note_deleted">Note Deleted!</string>
     <string name="undo">UNDO</string>
     <string name="enter_your_thoughts_here">Enter your thoughts here</string>
