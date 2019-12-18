@@ -61,7 +61,7 @@ class MainFragment : Fragment() {
                         setAction(getString(R.string.undo)) {
                             inputText.setText(deletedText)
                             saveText(deletedText)
-                        }
+                        }.anchorView = deleteButton
                         show()
                     }
             }
