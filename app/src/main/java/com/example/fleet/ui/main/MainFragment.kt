@@ -76,8 +76,10 @@ class MainFragment : Fragment() {
                 timer.schedule(object : TimerTask() {
                     override fun run() {
                         runOnUiThread {
-                            deleteButton.visibility = View.VISIBLE
-                            undoButton.visibility = View.GONE
+                            deleteButton?.let {
+                                deleteButton.visibility = View.VISIBLE
+                                undoButton.visibility = View.GONE
+                            }
                             deletedText = ""
                         }
                     }
