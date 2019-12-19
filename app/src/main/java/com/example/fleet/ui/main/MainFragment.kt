@@ -14,9 +14,11 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.fleet.R
-import com.google.android.material.snackbar.Snackbar
+import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.BufferedReader
+import java.util.*
+
 
 class MainFragment : Fragment() {
 
@@ -29,6 +31,8 @@ class MainFragment : Fragment() {
 
     private val clipboardManager by lazy { requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private val inputMethodManager by lazy { requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager }
+
+    private var deletedText: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,20 +54,32 @@ class MainFragment : Fragment() {
             }
         }
 
+        undoButton.setOnClickListener {
+            inputText.setText(deletedText)
+            saveText(deletedText)
+            deleteButton.visibility = View.VISIBLE
+            undoButton.visibility = View.GONE
+            deletedText = ""
+        }
+
         deleteButton.setOnClickListener {
-            val deletedText = inputText.text.toString()
+            deletedText = inputText.text.toString()
             if (deletedText.isNotEmpty()) {
                 inputText.setText("")
                 saveText("")
 
-                Snackbar.make(coordinatorLayout, getString(R.string.note_deleted), Snackbar.LENGTH_LONG)
-                    .apply {
-                        setAction(getString(R.string.undo)) {
-                            inputText.setText(deletedText)
-                            saveText(deletedText)
-                        }.anchorView = deleteButton
-                        show()
+                deleteButton.visibility = View.INVISIBLE
+                undoButton.visibility = View.VISIBLE
+                val t = Timer(false)
+                t.schedule(object : TimerTask() {
+                    override fun run() {
+                        runOnUiThread {
+                            deleteButton.visibility = View.VISIBLE
+                            undoButton.visibility = View.GONE
+                            deletedText = ""
+                        }
                     }
+                }, 3000)
             }
         }
 
