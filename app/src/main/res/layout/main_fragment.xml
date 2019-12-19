@@ -21,6 +21,7 @@
             android:id="@+id/inputText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/roboto_mono"
             android:gravity="top|start"
             android:hint="@string/enter_your_thoughts_here"
             android:inputType="textMultiLine|textCapSentences"
