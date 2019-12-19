@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:gravity="top|start"
             android:hint="@string/enter_your_thoughts_here"
-            android:inputType="textCapWords"
+            android:inputType="textMultiLine|textCapSentences"
             android:scrollbars="vertical"
             android:textSize="20sp" />
 
