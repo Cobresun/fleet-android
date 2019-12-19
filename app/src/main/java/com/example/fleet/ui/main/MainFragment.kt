@@ -32,6 +32,7 @@ class MainFragment : Fragment() {
     private val clipboardManager by lazy { requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private val inputMethodManager by lazy { requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager }
 
+    private var timer = Timer(false)
     private var deletedText: String = ""
 
     override fun onCreateView(
@@ -55,6 +56,8 @@ class MainFragment : Fragment() {
         }
 
         undoButton.setOnClickListener {
+            timer.cancel()
+            timer = Timer()
             inputText.setText(deletedText)
             saveText(deletedText)
             deleteButton.visibility = View.VISIBLE
@@ -70,8 +73,7 @@ class MainFragment : Fragment() {
 
                 deleteButton.visibility = View.INVISIBLE
                 undoButton.visibility = View.VISIBLE
-                val t = Timer(false)
-                t.schedule(object : TimerTask() {
+                timer.schedule(object : TimerTask() {
                     override fun run() {
                         runOnUiThread {
                             deleteButton.visibility = View.VISIBLE
