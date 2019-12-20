@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +30,6 @@ class MainFragment : Fragment() {
     private val filename = "fleetFile"
     private val files: Array<String> by lazy { requireContext().fileList() }
 
-    private val clipboardManager by lazy { requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private val inputMethodManager by lazy { requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager }
 
     private var timer = Timer(false)
@@ -87,12 +87,17 @@ class MainFragment : Fragment() {
             }
         }
 
-        copyButton.setOnClickListener {
-            val copiedText = inputText.text.toString()
-            if (copiedText.isNotEmpty()) {
-                val clip = ClipData.newPlainText("text", copiedText)
-                clipboardManager.setPrimaryClip(clip)
-                Toast.makeText(requireContext(), getString(R.string.note_copied), Toast.LENGTH_SHORT).show()
+        shareButton.setOnClickListener {
+            val shareText = inputText.text.toString()
+            if (shareText.isNotEmpty()) {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, inputText.text.toString())
+                    type = "text/plain"
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                startActivity(shareIntent)
             }
         }
 
