@@ -1,9 +1,6 @@
-package com.example.fleet.ui.main
+package com.cobresun.fleet.ui.main
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
-import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
@@ -11,10 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.example.fleet.R
+import com.cobresun.fleet.R
 import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.BufferedReader

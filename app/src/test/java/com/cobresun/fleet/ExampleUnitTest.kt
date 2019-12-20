@@ -1,4 +1,4 @@
-package com.example.fleet
+package com.cobresun.fleet
 
 import org.junit.Test
 

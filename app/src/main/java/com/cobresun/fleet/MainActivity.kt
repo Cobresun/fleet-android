@@ -1,8 +1,8 @@
-package com.example.fleet
+package com.cobresun.fleet
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.fleet.ui.main.MainFragment
+import com.cobresun.fleet.ui.main.MainFragment
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
