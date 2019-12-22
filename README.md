@@ -1,2 +1,2 @@
-# fleet-android
-Android client for project code name Fleet
+# quiknote-android
+Android client for quiknote
