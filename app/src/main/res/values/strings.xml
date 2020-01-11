@@ -4,4 +4,6 @@
     <string name="undo">UNDO</string>
     <string name="enter_your_thoughts_here">Enter your thoughts here</string>
     <string name="note_copied">Copied to clipboard</string>
+    <string name="channel_name">Quiknote</string>
+    <string name="channel_description">Reminders from QuikNote</string>
 </resources>
