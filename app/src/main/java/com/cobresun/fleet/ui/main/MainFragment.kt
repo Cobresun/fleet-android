@@ -19,20 +19,23 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.cobresun.fleet.MainActivity
 import com.cobresun.fleet.R
+import com.cobresun.fleet.databinding.MainFragmentBinding
 import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
-import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.BufferedReader
 import java.util.*
 
 
 class MainFragment : Fragment() {
 
+    private var _binding: MainFragmentBinding? = null
+    private val binding: MainFragmentBinding get() = _binding!!
+
     companion object {
         fun newInstance() = MainFragment()
+        const val CHANNEL_ID = "FLEET_CHANNEL_ID"
     }
 
     private val notificationId = 8888
-    private val CHANNEL_ID = "FLEET_CHANNEL_ID"
     private val filename = "fleetFile"
     private val files: Array<String> by lazy { requireContext().fileList() }
 
@@ -45,48 +48,49 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        _binding = MainFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         createNotificationChannel()
 
-        inputText.requestFocus()
+        binding.inputText.requestFocus()
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
 
         if (files.contains(filename)) {
             val savedText = requireContext().openFileInput(filename).bufferedReader().use(BufferedReader::readText)
             if (savedText.isNotEmpty()) {
-                inputText.setText(savedText)
+                binding.inputText.setText(savedText)
             }
         }
 
-        undoButton.setOnClickListener {
+        binding.undoButton.setOnClickListener {
             timer.cancel()
             timer = Timer()
-            inputText.setText(deletedText)
+            binding.inputText.setText(deletedText)
             saveText(deletedText)
-            deleteButton.visibility = View.VISIBLE
-            undoButton.visibility = View.GONE
+            binding.deleteButton.visibility = View.VISIBLE
+            binding.undoButton.visibility = View.GONE
             deletedText = ""
         }
 
-        deleteButton.setOnClickListener {
-            deletedText = inputText.text.toString()
+        binding.deleteButton.setOnClickListener {
+            deletedText = binding.inputText.text.toString()
             if (deletedText.isNotEmpty()) {
-                inputText.setText("")
+                binding.inputText.setText("")
                 saveText("")
 
-                deleteButton.visibility = View.INVISIBLE
-                undoButton.visibility = View.VISIBLE
+                binding.deleteButton.visibility = View.INVISIBLE
+                binding.undoButton.visibility = View.VISIBLE
                 timer.schedule(object : TimerTask() {
                     override fun run() {
                         runOnUiThread {
-                            deleteButton?.let {
-                                deleteButton.visibility = View.VISIBLE
-                                undoButton.visibility = View.GONE
+                            binding.deleteButton.let {
+                                binding.deleteButton.visibility = View.VISIBLE
+                                binding.undoButton.visibility = View.GONE
                             }
                             deletedText = ""
                         }
@@ -95,12 +99,12 @@ class MainFragment : Fragment() {
             }
         }
 
-        shareButton.setOnClickListener {
-            val shareText = inputText.text.toString()
+        binding.shareButton.setOnClickListener {
+            val shareText = binding.inputText.text.toString()
             if (shareText.isNotEmpty()) {
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, inputText.text.toString())
+                    putExtra(Intent.EXTRA_TEXT, binding.inputText.text.toString())
                     type = "text/plain"
                 }
 
@@ -109,8 +113,8 @@ class MainFragment : Fragment() {
             }
         }
 
-        reminderButton.setOnClickListener {
-            val remindText = inputText.text.toString()
+        binding.reminderButton.setOnClickListener {
+            val remindText = binding.inputText.text.toString()
             if (remindText.isNotEmpty()) {
                 // Create an explicit intent for an Activity in your app
                 val intent = Intent(requireContext(), MainActivity::class.java).apply {
@@ -136,7 +140,7 @@ class MainFragment : Fragment() {
             }
         }
 
-        inputText.addTextChangedListener {
+        binding.inputText.addTextChangedListener {
             it?.let {
                 saveText(it.toString())
             }
@@ -165,5 +169,4 @@ class MainFragment : Fragment() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
 }
