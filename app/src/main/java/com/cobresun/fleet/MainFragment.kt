@@ -1,4 +1,4 @@
-package com.cobresun.fleet.ui.main
+package com.cobresun.fleet
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -17,37 +17,30 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.cobresun.fleet.MainActivity
-import com.cobresun.fleet.R
 import com.cobresun.fleet.databinding.MainFragmentBinding
 import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.BufferedReader
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainFragment : Fragment() {
 
     private var _binding: MainFragmentBinding? = null
     private val binding: MainFragmentBinding get() = _binding!!
 
-    companion object {
-        fun newInstance() = MainFragment()
-        const val CHANNEL_ID = "FLEET_CHANNEL_ID"
-    }
+    @Inject lateinit var inputMethodManager: InputMethodManager
 
+    private val channelId = "FLEET_CHANNEL_ID"
     private val notificationId = 8888
     private val filename = "fleetFile"
     private val files: Array<String> by lazy { requireContext().fileList() }
 
-    private val inputMethodManager by lazy { requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager }
-
     private var timer = Timer(false)
     private var deletedText: String = ""
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -121,7 +114,7 @@ class MainFragment : Fragment() {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 val pendingIntent: PendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, 0)
-                val builder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+                val builder = NotificationCompat.Builder(requireContext(), channelId)
                     .setSmallIcon(R.drawable.notification_icon)
                     .setContentTitle("QuikNote Reminder")
                     .setContentText(remindText)
@@ -160,7 +153,7 @@ class MainFragment : Fragment() {
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            val channel = NotificationChannel(channelId, name, importance).apply {
                 description = descriptionText
             }
             // Register the channel with the system

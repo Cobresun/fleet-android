@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 29
@@ -53,4 +54,9 @@ dependencies {
     // App Center
     implementation "com.microsoft.appcenter:appcenter-analytics:2.5.1"
     implementation "com.microsoft.appcenter:appcenter-crashes:2.5.1"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.31-alpha"
+    kapt "com.google.dagger:hilt-compiler:2.31-alpha"
+    kapt "com.google.dagger:hilt-android-compiler:2.31-alpha"
 }
