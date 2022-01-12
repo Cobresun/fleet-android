@@ -3,8 +3,8 @@ package com.cobresun.fleet
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.os.Build
@@ -18,7 +18,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.cobresun.fleet.databinding.MainFragmentBinding
-import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.BufferedReader
 import java.util.*
@@ -80,13 +79,11 @@ class MainFragment : Fragment() {
                 binding.undoButton.visibility = View.VISIBLE
                 timer.schedule(object : TimerTask() {
                     override fun run() {
-                        runOnUiThread {
-                            binding.deleteButton.let {
-                                binding.deleteButton.visibility = View.VISIBLE
-                                binding.undoButton.visibility = View.GONE
-                            }
-                            deletedText = ""
+                        binding.deleteButton.let {
+                            binding.deleteButton.visibility = View.VISIBLE
+                            binding.undoButton.visibility = View.GONE
                         }
+                        deletedText = ""
                     }
                 }, 3000)
             }
@@ -113,7 +110,7 @@ class MainFragment : Fragment() {
                 val intent = Intent(requireContext(), MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
-                val pendingIntent: PendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, 0)
+                val pendingIntent: PendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, FLAG_IMMUTABLE)
                 val builder = NotificationCompat.Builder(requireContext(), channelId)
                     .setSmallIcon(R.drawable.notification_icon)
                     .setContentTitle("QuikNote Reminder")
