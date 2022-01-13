@@ -25,7 +25,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
-
     private var _binding: MainFragmentBinding? = null
     private val binding: MainFragmentBinding get() = _binding!!
 
@@ -79,11 +78,13 @@ class MainFragment : Fragment() {
                 binding.undoButton.visibility = View.VISIBLE
                 timer.schedule(object : TimerTask() {
                     override fun run() {
-                        binding.deleteButton.let {
-                            binding.deleteButton.visibility = View.VISIBLE
-                            binding.undoButton.visibility = View.GONE
+                        requireActivity().runOnUiThread {
+                            binding.deleteButton.let {
+                                binding.deleteButton.visibility = View.VISIBLE
+                                binding.undoButton.visibility = View.GONE
+                            }
+                            deletedText = ""
                         }
-                        deletedText = ""
                     }
                 }, 3000)
             }
